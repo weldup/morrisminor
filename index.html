@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#2d5016">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Morris Minor Manual</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Morris Minor</h1>
+        <p class="subtitle">Workshop Manual & Parts Catalogue</p>
+    </header>
+
+    <div class="search-container">
+        <input type="search" id="searchInput" placeholder="Search... e.g. brakes, carburetter, RAD101" autocomplete="off" aria-label="Search manual and parts">
+        <div id="searchStatus" class="search-status"></div>
+    </div>
+
+    <div id="filters" class="filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="manual">Manual</button>
+        <button class="filter-btn" data-filter="catalogue">ESM Parts</button>
+        <button class="filter-btn" data-filter="birmingham">Birmingham</button>
+    </div>
+
+    <main id="results" class="results">
+        <div id="welcome" class="welcome">
+            <p>Search the complete AKD530 Workshop Manual and Parts Catalogue.</p>
+            <p class="hint">Try: brakes, clutch, steering, gearbox, wiring, RAD101...</p>
+            <div class="chapters" id="chapterList"></div>
+        </div>
+    </main>
+
+    <div id="imageModal" class="modal" hidden>
+        <div class="modal-header">
+            <button class="modal-close" aria-label="Close">&times;</button>
+            <span class="zoom-hint">Pinch or double-tap to zoom</span>
+        </div>
+        <div class="modal-body">
+            <img id="modalImage" src="" alt="Diagram">
+        </div>
+    </div>
+
+    <div id="loading" class="loading" hidden>
+        <div class="spinner"></div>
+        <p>Building search index...</p>
+    </div>
+
+    <script src="lunr.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
