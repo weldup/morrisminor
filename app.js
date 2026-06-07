@@ -720,21 +720,27 @@ pvNext.addEventListener('click', () => {
 
 // Swipe support for page viewer
 let pvTouchStartX = 0;
+let pvTouchStartY = 0;
+let pvTouchCount = 0;
 pvBody.addEventListener('touchstart', (e) => {
+    pvTouchCount = e.touches.length;
     if (e.touches.length === 1) {
         pvTouchStartX = e.touches[0].clientX;
+        pvTouchStartY = e.touches[0].clientY;
     }
 });
 
 pvBody.addEventListener('touchend', (e) => {
+    // Only handle single-finger swipes (not pinch)
+    if (pvTouchCount !== 1) return;
     if (e.changedTouches.length === 1) {
-        const diff = e.changedTouches[0].clientX - pvTouchStartX;
-        if (Math.abs(diff) > 60) {
-            if (diff > 0) {
-                // Swipe right = previous
+        const diffX = e.changedTouches[0].clientX - pvTouchStartX;
+        const diffY = e.changedTouches[0].clientY - pvTouchStartY;
+        // Only trigger if horizontal movement > vertical (deliberate swipe, not scroll/zoom)
+        if (Math.abs(diffX) > 80 && Math.abs(diffX) > Math.abs(diffY) * 2) {
+            if (diffX > 0) {
                 pvPrev.click();
             } else {
-                // Swipe left = next
                 pvNext.click();
             }
         }

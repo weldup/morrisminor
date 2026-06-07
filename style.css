@@ -480,7 +480,8 @@ mark {
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    touch-action: pan-x pan-y pinch-zoom;
+    touch-action: pinch-zoom pan-y;
+    -webkit-overflow-scrolling: touch;
 }
 
 .pv-body img {
