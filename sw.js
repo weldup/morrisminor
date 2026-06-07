@@ -3,17 +3,17 @@
  * Caches the app shell and data on first load
  */
 
-const CACHE_NAME = 'morris-minor-v4';
+const CACHE_NAME = 'morris-minor-v5';
 
 const APP_SHELL = [
-    '/',
-    '/index.html',
-    '/style.css',
-    '/app.js',
-    '/lunr.min.js',
-    '/manifest.json',
-    '/icon.svg',
-    '/data/search_data.json',
+    './',
+    './index.html',
+    './style.css',
+    './app.js',
+    './lunr.min.js',
+    './manifest.json',
+    './icon.svg',
+    './data/search_data.json',
 ];
 
 // Install: cache app shell
