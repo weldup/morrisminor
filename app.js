@@ -205,6 +205,14 @@ function displayResults(docs, query) {
     resultsEl.querySelectorAll('.image-thumb').forEach(img => {
         img.addEventListener('click', () => openModal(img.dataset.src));
     });
+
+    resultsEl.querySelectorAll('.page-link').forEach(link => {
+        link.addEventListener('click', () => {
+            const page = parseInt(link.dataset.page);
+            const source = link.dataset.source;
+            openPageViewer(page, source);
+        });
+    });
 }
 
 function renderCard(doc, query) {
@@ -238,11 +246,21 @@ function renderCard(doc, query) {
 
     const pageInfo = doc.pages && doc.pages.length ? `Page ${doc.pages.join(', ')}` : '';
 
+    // Create clickable page links
+    let pageLinksHtml = '';
+    if (doc.pages && doc.pages.length) {
+        const source = doc.type === 'manual' ? 'manual' : doc.type === 'birmingham' ? 'birmingham' : 'catalogue';
+        const links = doc.pages.map(p => 
+            `<span class="page-link" data-page="${p}" data-source="${source}">📄 Page ${p}</span>`
+        ).join(' ');
+        pageLinksHtml = links;
+    }
+
     return `
         <div class="result-card${typeClass}">
             <span class="type-badge">${typeLabel}</span>
             <div class="title">${highlightText(doc.title, query)}</div>
-            <div class="chapter">${doc.chapter}${pageInfo ? ' · ' + pageInfo : ''}</div>
+            <div class="chapter">${doc.chapter}${pageInfo ? ' · ' + pageInfo : ''} ${pageLinksHtml}</div>
             <div class="body">${bodyHtml}</div>
             <button class="expand-btn" data-doc-id="${doc.id}">Show more</button>
             ${imagesHtml}
@@ -626,3 +644,99 @@ if ('serviceWorker' in navigator) {
 
 // Start
 init();
+
+
+// --- Page Viewer ---
+const pageViewer = document.getElementById('pageViewer');
+const pvImage = document.getElementById('pvImage');
+const pvTitle = document.getElementById('pvTitle');
+const pvSource = document.getElementById('pvSource');
+const pvPageNum = document.getElementById('pvPageNum');
+const pvPrev = document.getElementById('pvPrev');
+const pvNext = document.getElementById('pvNext');
+const pvBody = document.getElementById('pvBody');
+
+// Page ranges for each source
+const PAGE_RANGES = {
+    manual: { min: 1, max: 443, prefix: 'images/manual/page_', suffix: '_img_01.jpg', pad: 3 },
+    catalogue: { min: 53, max: 208, prefix: 'images/catalogue/cat_page_', suffix: '_img_01.jpg', pad: 0 },
+    birmingham: { min: 1, max: 60, prefix: 'images/birmingham/page_', suffix: '.jpg', pad: 3 },
+};
+
+let pvCurrentPage = 1;
+let pvCurrentSource = 'manual';
+
+function getPageImageUrl(page, source) {
+    const range = PAGE_RANGES[source];
+    const pageStr = range.pad ? String(page).padStart(range.pad, '0') : String(page);
+    return `${range.prefix}${pageStr}${range.suffix}`;
+}
+
+function openPageViewer(page, source) {
+    pvCurrentPage = page;
+    pvCurrentSource = source;
+    pageViewer.hidden = false;
+    document.body.style.overflow = 'hidden';
+    updatePageViewer();
+}
+
+function updatePageViewer() {
+    const range = PAGE_RANGES[pvCurrentSource];
+    const url = getPageImageUrl(pvCurrentPage, pvCurrentSource);
+    pvImage.src = url;
+    
+    const sourceNames = { manual: 'Workshop Manual', catalogue: 'ESM Parts Catalogue', birmingham: 'Birmingham Catalogue' };
+    pvTitle.textContent = `Page ${pvCurrentPage}`;
+    pvSource.textContent = sourceNames[pvCurrentSource];
+    pvPageNum.textContent = `${pvCurrentPage} / ${range.max}`;
+    
+    pvPrev.disabled = pvCurrentPage <= range.min;
+    pvNext.disabled = pvCurrentPage >= range.max;
+}
+
+function closePageViewer() {
+    pageViewer.hidden = true;
+    document.body.style.overflow = '';
+    pvImage.src = '';
+}
+
+document.querySelector('.pv-close').addEventListener('click', closePageViewer);
+
+pvPrev.addEventListener('click', () => {
+    const range = PAGE_RANGES[pvCurrentSource];
+    if (pvCurrentPage > range.min) {
+        pvCurrentPage--;
+        updatePageViewer();
+    }
+});
+
+pvNext.addEventListener('click', () => {
+    const range = PAGE_RANGES[pvCurrentSource];
+    if (pvCurrentPage < range.max) {
+        pvCurrentPage++;
+        updatePageViewer();
+    }
+});
+
+// Swipe support for page viewer
+let pvTouchStartX = 0;
+pvBody.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+        pvTouchStartX = e.touches[0].clientX;
+    }
+});
+
+pvBody.addEventListener('touchend', (e) => {
+    if (e.changedTouches.length === 1) {
+        const diff = e.changedTouches[0].clientX - pvTouchStartX;
+        if (Math.abs(diff) > 60) {
+            if (diff > 0) {
+                // Swipe right = previous
+                pvPrev.click();
+            } else {
+                // Swipe left = next
+                pvNext.click();
+            }
+        }
+    }
+});

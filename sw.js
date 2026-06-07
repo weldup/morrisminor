@@ -3,7 +3,7 @@
  * Caches the app shell and data on first load
  */
 
-const CACHE_NAME = 'morris-minor-v2';
+const CACHE_NAME = 'morris-minor-v3';
 
 const APP_SHELL = [
     '/',

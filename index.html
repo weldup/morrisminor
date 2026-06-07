@@ -48,6 +48,22 @@
         </div>
     </div>
 
+    <div id="pageViewer" class="page-viewer" hidden>
+        <div class="pv-header">
+            <button class="pv-close" aria-label="Close">&times;</button>
+            <span class="pv-title" id="pvTitle">Page 1</span>
+            <span class="pv-source" id="pvSource"></span>
+        </div>
+        <div class="pv-body" id="pvBody">
+            <img id="pvImage" src="" alt="Page">
+        </div>
+        <div class="pv-nav">
+            <button class="pv-btn" id="pvPrev">&larr; Prev</button>
+            <span class="pv-page-num" id="pvPageNum">1 / 443</span>
+            <button class="pv-btn" id="pvNext">Next &rarr;</button>
+        </div>
+    </div>
+
     <div id="loading" class="loading" hidden>
         <div class="spinner"></div>
         <p>Building search index...</p>

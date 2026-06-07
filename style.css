@@ -428,6 +428,111 @@ mark {
     border-radius: 2px;
 }
 
+/* Page Viewer */
+.page-viewer {
+    position: fixed;
+    inset: 0;
+    background: var(--cream);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.page-viewer[hidden] {
+    display: none;
+}
+
+.pv-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--green);
+    color: white;
+    flex-shrink: 0;
+}
+
+.pv-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    line-height: 1;
+}
+
+.pv-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.pv-source {
+    font-size: 0.7rem;
+    opacity: 0.7;
+    margin-left: auto;
+}
+
+.pv-body {
+    flex: 1;
+    overflow: auto;
+    padding: 0.5rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    touch-action: pan-x pan-y pinch-zoom;
+}
+
+.pv-body img {
+    max-width: 100%;
+    height: auto;
+}
+
+.pv-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: white;
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.pv-btn {
+    padding: 0.5rem 1rem;
+    background: var(--green);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    min-width: 80px;
+}
+
+.pv-btn:disabled {
+    background: #ccc;
+    cursor: default;
+}
+
+.pv-page-num {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* Page link in results */
+.page-link {
+    display: inline-block;
+    font-size: 0.7rem;
+    color: var(--green);
+    cursor: pointer;
+    text-decoration: underline;
+    margin-left: 0.3rem;
+}
+
+.page-link:active {
+    color: var(--green-light);
+}
+
 /* Responsive */
 @media (min-width: 768px) {
     .results {
